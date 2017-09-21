@@ -33,7 +33,8 @@ namespace ExcelDataReader.Core.OpenXmlFormat
         {
             string[] parts = value.Split(':');
 
-            ReferenceHelper.ParseReference(parts[0], out int col, out int row);
+			int col, row;
+            ReferenceHelper.ParseReference(parts[0], out col, out row);
             FirstCol = col;
             FirstRow = row;
 

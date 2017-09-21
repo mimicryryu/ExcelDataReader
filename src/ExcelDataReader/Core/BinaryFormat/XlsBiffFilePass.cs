@@ -16,7 +16,7 @@ namespace ExcelDataReader.Core.BinaryFormat
                 // Cipher = EncryptionType.XOR;
                 var encryptionKey = ReadUInt16(0);
                 var hashValue = ReadUInt16(2);
-                EncryptionInfo = EncryptionInfo.Create(encryptionKey, hashValue);
+                this.EncryptionInfo = EncryptionInfo.Create(encryptionKey, hashValue);
             }
             else
             {
@@ -26,13 +26,13 @@ namespace ExcelDataReader.Core.BinaryFormat
                 {
                     var encryptionKey = ReadUInt16(2);
                     var hashValue = ReadUInt16(4);
-                    EncryptionInfo = EncryptionInfo.Create(encryptionKey, hashValue);
+                    this.EncryptionInfo = EncryptionInfo.Create(encryptionKey, hashValue);
                 }
                 else if (type == 1)
                 {
                     var encryptionInfo = new byte[bytes.Length - 6]; // 6 = 4 + 2 = biffVersion header + filepass enryptiontype
                     Array.Copy(bytes, 6, encryptionInfo, 0, bytes.Length - 6);
-                    EncryptionInfo = EncryptionInfo.Create(encryptionInfo);
+                    this.EncryptionInfo = EncryptionInfo.Create(encryptionInfo);
                 }
                 else
                 {

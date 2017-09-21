@@ -70,7 +70,7 @@ namespace ExcelDataReader.Core.BinaryFormat
         /// <summary>
         /// Gets or sets the current position in BIFF stream
         /// </summary>
-        public int Position { get => (int)BaseStream.Position; set => Seek(value, SeekOrigin.Begin); }
+		public int Position { get {return (int)BaseStream.Position;} set {Seek(value, SeekOrigin.Begin);} }
 
         public Stream BaseStream { get; }
 

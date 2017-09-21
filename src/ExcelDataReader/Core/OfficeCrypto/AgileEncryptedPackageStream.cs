@@ -12,7 +12,7 @@ namespace ExcelDataReader.Core.OfficeCrypto
 
         public AgileEncryptedPackageStream(Stream stream, byte[] key, byte[] iv, EncryptionInfo encryption)
         {
-            Stream = stream;
+            this.Stream = stream;
             Key = key;
             IV = iv;
             Encryption = encryption;
@@ -30,7 +30,7 @@ namespace ExcelDataReader.Core.OfficeCrypto
 
         public override long Length => DecryptedLength;
 
-        public override long Position { get => Offset - SegmentLength + SegmentOffset; set => Seek(value, SeekOrigin.Begin); }
+		public override long Position { get {return Offset - SegmentLength + SegmentOffset;} set {Seek(value, SeekOrigin.Begin);} }
 
         private Stream Stream { get; set; }
 

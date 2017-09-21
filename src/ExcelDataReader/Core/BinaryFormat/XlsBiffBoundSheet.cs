@@ -14,7 +14,7 @@ namespace ExcelDataReader.Core.BinaryFormat
             : base(bytes, offset)
         {
             StartOffset = ReadUInt32(0x0);
-            Type = (SheetType)ReadByte(0x5);
+            this.Type = (SheetType)ReadByte(0x5);
             VisibleState = (SheetVisibility)ReadByte(0x4);
 
             if (biffVersion == 8)
@@ -35,7 +35,7 @@ namespace ExcelDataReader.Core.BinaryFormat
             : base(new byte[32], 0)
         {
             StartOffset = startOffset;
-            Type = type;
+            this.Type = type;
             VisibleState = visibleState;
             _sheetName = new XlsInternalString(name);
         }

@@ -14,7 +14,7 @@ namespace ExcelDataReader.Core.BinaryFormat
     {
         internal XlsWorkbook(Stream stream, string password, Encoding fallbackEncoding)
         {
-            Stream = stream;
+            this.Stream = stream;
 
             using (var biffStream = new XlsBiffStream(stream, 0, 0, password))
             {

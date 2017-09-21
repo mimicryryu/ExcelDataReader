@@ -33,7 +33,8 @@ namespace ExcelDataReader
             {
                 // Can be BIFF5-8 or password protected OpenXml
                 var document = new CompoundDocument(fileStream);
-                if (TryGetWorkbook(fileStream, document, out var stream))
+				Stream stream; 
+                if (TryGetWorkbook(fileStream, document, out stream))
                 {
                     return new ExcelBinaryReader(stream, configuration);
                 }
@@ -77,7 +78,8 @@ namespace ExcelDataReader
             if (CompoundDocument.IsCompoundDocument(probe))
             {
                 var document = new CompoundDocument(fileStream);
-                if (TryGetWorkbook(fileStream, document, out var stream))
+				Stream stream;
+                if (TryGetWorkbook(fileStream, document, out stream))
                 {
                     return new ExcelBinaryReader(stream, configuration);
                 }
@@ -113,7 +115,8 @@ namespace ExcelDataReader
             if (CompoundDocument.IsCompoundDocument(probe))
             {
                 var document = new CompoundDocument(fileStream);
-                if (TryGetEncryptedPackage(fileStream, document, configuration?.Password, out var stream))
+				Stream stream;
+                if (TryGetEncryptedPackage(fileStream, document, configuration?.Password, out stream))
                 {
                     return new ExcelOpenXmlReader(stream, configuration);
                 }

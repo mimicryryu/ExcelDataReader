@@ -11,7 +11,7 @@ namespace ExcelDataReader.Core.CompoundFormat
             Document = document;
             BaseStream = baseStream;
             IsMini = isMini;
-            Length = length;
+			_length = length;
 
             if (IsMini)
             {
@@ -36,9 +36,10 @@ namespace ExcelDataReader.Core.CompoundFormat
 
         public override bool CanWrite => false;
 
-        public override long Length { get; }
+		private long _length;
+		public override long Length { get { return _length;} }
 
-        public override long Position { get => Offset - SectorBytes.Length + SectorOffset; set => Seek(value, SeekOrigin.Begin); }
+		public override long Position { get { return Offset - SectorBytes.Length + SectorOffset; } set { Seek (value, SeekOrigin.Begin); } }
 
         private Stream BaseStream { get; set; }
 

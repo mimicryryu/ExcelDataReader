@@ -31,8 +31,8 @@ namespace ExcelDataReader.Core.OfficeCrypto
 
         public override long Position
         {
-            get => BaseStream.Position;
-            set => BaseStream.Position = value;
+            get { return BaseStream.Position; }
+            set { BaseStream.Position = value; }
         }
 
         private Stream BaseStream { get; set; }

@@ -26,7 +26,8 @@ namespace ExcelDataReader.Core
         /// <param name="fileStream">The zip file stream.</param>
         public ZipWorker(Stream fileStream)
         {
-            _zipStream = fileStream ?? throw new ArgumentNullException(nameof(fileStream));
+			if (fileStream == null) throw new ArgumentNullException(nameof(fileStream));
+            _zipStream = fileStream;
             _zipFile = new ZipArchive(fileStream);
         }
 
