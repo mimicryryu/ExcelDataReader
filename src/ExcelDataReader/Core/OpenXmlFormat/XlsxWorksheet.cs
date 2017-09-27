@@ -435,7 +435,8 @@ namespace ExcelDataReader.Core.OpenXmlFormat
             switch (aT)
             {
                 case AS: //// if string
-                    if (int.TryParse(rawValue, style, invariantCulture, out var sstIndex))
+                    int sstIndex;
+                    if (int.TryParse(rawValue, style, invariantCulture, out sstIndex))
                     {
                         if (sstIndex >= 0 && sstIndex < Workbook.SST.Count)
                         {
@@ -450,7 +451,8 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 case "b": //// boolean
                     return rawValue == "1";
                 case "d": //// ISO 8601 date
-                    if (DateTime.TryParseExact(rawValue, "yyyy-MM-dd", invariantCulture, DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out var date))
+                    DateTime date;
+                    if (DateTime.TryParseExact(rawValue, "yyyy-MM-dd", invariantCulture, DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out date))
                         return date;
 
                     return rawValue;
@@ -460,7 +462,8 @@ namespace ExcelDataReader.Core.OpenXmlFormat
 
                     if (aS != null)
                     {
-                        if (int.TryParse(aS, style, invariantCulture, out var styleIndex))
+                        int styleIndex;
+                        if (int.TryParse(aS, style, invariantCulture, out styleIndex))
                         {
                             if (styleIndex >= 0 && styleIndex < Workbook.Styles.CellXfs.Count)
                             {
