@@ -1,4 +1,3 @@
-// ReSharper disable InconsistentNaming
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -104,6 +103,17 @@ namespace ExcelDataReader.Core.OpenXmlFormat
             }
         }
 
+        public NumberFormatString GetNumberFormatString(int numberFormatIndex)
+        {
+            var numFmt = Workbook.Styles.NumFmts.Find(x => x.Id == numberFormatIndex);
+            if (numFmt != null)
+            { 
+                return numFmt.FormatCode;
+            }
+
+            return BuiltinNumberFormat.GetBuiltinNumberFormat(numberFormatIndex);
+        }
+
         private void ReadWorksheetGlobals()
         {
             if (string.IsNullOrEmpty(Path))
@@ -204,8 +214,7 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 }
                 else if (xmlReader.IsStartElement(NSheetFormatProperties, NsSpreadsheetMl))
                 {
-					double defaultRowHeight;
-                    if (double.TryParse(xmlReader.GetAttribute(ADefaultRowHeight), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultRowHeight))
+                    if (double.TryParse(xmlReader.GetAttribute(ADefaultRowHeight), NumberStyles.Any, CultureInfo.InvariantCulture, out var defaultRowHeight))
                         DefaultRowHeight = defaultRowHeight;
 
                     xmlReader.Skip();
@@ -314,17 +323,14 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 Cells = new List<Cell>()
             };
 
-			int rowIndex;
-            if (int.TryParse(xmlReader.GetAttribute(AR), out rowIndex))
+            if (int.TryParse(xmlReader.GetAttribute(AR), out int rowIndex))
                 result.RowIndex = rowIndex - 1; // The row attribute is 1-based
             else
                 result.RowIndex = nextRowIndex;
 
-			int hidden, customHeight;
-			double height;
-            int.TryParse(xmlReader.GetAttribute(AHidden), out hidden);
-            int.TryParse(xmlReader.GetAttribute(ACustomHeight), out customHeight);
-            double.TryParse(xmlReader.GetAttribute(AHt), NumberStyles.Any, CultureInfo.InvariantCulture, out height);
+            int.TryParse(xmlReader.GetAttribute(AHidden), out int hidden);
+            int.TryParse(xmlReader.GetAttribute(ACustomHeight), out int customHeight);
+            double.TryParse(xmlReader.GetAttribute(AHt), NumberStyles.Any, CultureInfo.InvariantCulture, out var height);
 
             if (hidden == 0)
                 result.Height = customHeight != 0 ? height : DefaultRowHeight;
@@ -360,11 +366,22 @@ namespace ExcelDataReader.Core.OpenXmlFormat
             var aT = xmlReader.GetAttribute(AT);
             var aR = xmlReader.GetAttribute(AR);
 
-			int referenceColumn, referenceRow;
-            if (ReferenceHelper.ParseReference(aR, out referenceColumn, out referenceRow))
+            if (ReferenceHelper.ParseReference(aR, out int referenceColumn, out int referenceRow))
                 result.ColumnIndex = referenceColumn - 1; // ParseReference is 1-based
             else
                 result.ColumnIndex = nextColumnIndex;
+
+            if (aS != null)
+            {
+                if (int.TryParse(aS, NumberStyles.Any, CultureInfo.InvariantCulture, out var styleIndex))
+                {
+                    if (styleIndex >= 0 && styleIndex < Workbook.Styles.CellXfs.Count)
+                    {
+                        XlsxXf xf = Workbook.Styles.CellXfs[styleIndex];
+                        result.NumberFormatIndex = xf.NumFmtId;
+                    }
+                }
+            }
 
             if (!XmlReaderHelper.ReadFirstContent(xmlReader))
             {
@@ -377,13 +394,13 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 {
                     var rawValue = xmlReader.ReadElementContentAsString();
                     if (!string.IsNullOrEmpty(rawValue))
-                        result.Value = ConvertCellValue(rawValue, aT, aS);
+                        result.Value = ConvertCellValue(rawValue, aT, result.NumberFormatIndex);
                 }
                 else if (xmlReader.IsStartElement(NIs, NsSpreadsheetMl))
                 {
                     var rawValue = ReadInlineString(xmlReader);
                     if (!string.IsNullOrEmpty(rawValue))
-                        result.Value = ConvertCellValue(rawValue, aT, aS);
+                        result.Value = ConvertCellValue(rawValue, aT, result.NumberFormatIndex);
                 }
                 else if (!XmlReaderHelper.SkipContent(xmlReader))
                 {
@@ -418,7 +435,7 @@ namespace ExcelDataReader.Core.OpenXmlFormat
             return result;
         }
 
-        private object ConvertCellValue(string rawValue, string aT, string aS)
+        private object ConvertCellValue(string rawValue, string aT, int numberFormatIndex)
         {
             const NumberStyles style = NumberStyles.Any;
             var invariantCulture = CultureInfo.InvariantCulture;
@@ -426,8 +443,7 @@ namespace ExcelDataReader.Core.OpenXmlFormat
             switch (aT)
             {
                 case AS: //// if string
-                    int sstIndex;
-                    if (int.TryParse(rawValue, style, invariantCulture, out sstIndex))
+                    if (int.TryParse(rawValue, style, invariantCulture, out var sstIndex))
                     {
                         if (sstIndex >= 0 && sstIndex < Workbook.SST.Count)
                         {
@@ -442,38 +458,29 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 case "b": //// boolean
                     return rawValue == "1";
                 case "d": //// ISO 8601 date
-                    DateTime date;
-                    if (DateTime.TryParseExact(rawValue, "yyyy-MM-dd", invariantCulture, DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out date))
+                    if (DateTime.TryParseExact(rawValue, "yyyy-MM-dd", invariantCulture, DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out var date))
                         return date;
 
                     return rawValue;
                 default:
-                    double number;
-                    bool isNumber = double.TryParse(rawValue, style, invariantCulture, out number);
+                    bool isNumber = double.TryParse(rawValue, style, invariantCulture, out double number);
 
-                    if (aS != null)
-                    {
-                        int styleIndex;
-                        if (int.TryParse(aS, style, invariantCulture, out styleIndex))
-                        {
-                            if (styleIndex >= 0 && styleIndex < Workbook.Styles.CellXfs.Count)
-                            {
-                                XlsxXf xf = Workbook.Styles.CellXfs[styleIndex];
-                                if (isNumber && Workbook.IsDateTimeStyle(xf.NumFmtId))
-                                    return Helpers.ConvertFromOATime(number, Workbook.IsDate1904);
-                            }
-                        }
-
-                        // NOTE: Commented out to match behavior of the binary reader; 
-                        // formatting should ultimately be applied by the caller
-                        // if (xf.NumFmtId == 49) // Text format but value is not stored as a string. If numeric convert to current culture. 
-                        //    return isNumber ? number.ToString() : rawValue;
-                    }
+                    if (isNumber && IsDateTimeStyle(numberFormatIndex))
+                        return Helpers.ConvertFromOATime(number, Workbook.IsDate1904);
 
                     if (isNumber)
                         return number;
                     return rawValue;
             }
+        }
+
+        private bool IsDateTimeStyle(int numberFormatIndex)
+        {
+            var format = GetNumberFormatString(numberFormatIndex);
+            if (format == null)
+                return false;
+
+            return format.IsDateTimeFormat;
         }
     }
 }
