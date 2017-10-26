@@ -474,24 +474,22 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                     return rawValue;
                 default:
                     double number;
-                    bool isNumber = double.TryParse(rawValue, style, invariantCulture, out number);
+                    if (double.TryParse(rawValue, style, invariantCulture, out number))
+                    {
+                        var format = GetNumberFormatString(numberFormatIndex);
+                        if (format != null)
+                        {
+                            if (format.IsDateTimeFormat)
+                                return Helpers.ConvertFromOATime(number, Workbook.IsDate1904);
+                            if (format.IsTimeSpanFormat)
+                                return TimeSpan.FromDays(number);
+                        }
 
-                    if (isNumber && IsDateTimeStyle(numberFormatIndex))
-                        return Helpers.ConvertFromOATime(number, Workbook.IsDate1904);
-
-                    if (isNumber)
                         return number;
+                    }
+
                     return rawValue;
             }
-        }
-
-        private bool IsDateTimeStyle(int numberFormatIndex)
-        {
-            var format = GetNumberFormatString(numberFormatIndex);
-            if (format == null)
-                return false;
-
-            return format.IsDateTimeFormat;
         }
     }
 }

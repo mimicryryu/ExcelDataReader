@@ -38,6 +38,8 @@ namespace ExcelDataReader
             if (isValid)
             {
                 Sections = sections;
+                IsDateTimeFormat = GetFirstSection(SectionType.Date) != null;
+                IsTimeSpanFormat = GetFirstSection(SectionType.Duration) != null;
             }
             else
             {
@@ -58,13 +60,12 @@ namespace ExcelDataReader
         /// <summary>
         /// Gets a value indicating whether the format represents a DateTime
         /// </summary>
-        public bool IsDateTimeFormat
-        {
-            get
-            {
-                return GetFirstSection(SectionType.Date) != null;
-            }
-        }
+        public bool IsDateTimeFormat { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the format represents a TimeSpan
+        /// </summary>
+        public bool IsTimeSpanFormat { get; }
 
 #if NET20
         internal IList<Section> Sections { get; }
