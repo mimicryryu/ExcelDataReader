@@ -35,6 +35,13 @@
     <Folder Include="ExcelDataReader\" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Data" />
+    <Reference Include="System" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
       <Link>ExcelDataReader\AssemblyInfo.cs</Link>
     </Compile>
@@ -62,14 +69,17 @@
     <Compile Include="IExcelDataReader.cs">
       <Link>ExcelDataReader\IExcelDataReader.cs</Link>
     </Compile>
+    <Compile Include="NumberFormatString.cs">
+      <Link>ExcelDataReader\NumberFormatString.cs</Link>
+    </Compile>
+    <Compile Include="Core\BuiltinNumberFormat.cs">
+      <Link>ExcelDataReader\Core\BuiltinNumberFormat.cs</Link>
+    </Compile>
     <Compile Include="Core\Cell.cs">
       <Link>ExcelDataReader\Core\Cell.cs</Link>
     </Compile>
     <Compile Include="Core\EncodingHelper.cs">
       <Link>ExcelDataReader\Core\EncodingHelper.cs</Link>
-    </Compile>
-    <Compile Include="Core\FormatReader.cs">
-      <Link>ExcelDataReader\Core\FormatReader.cs</Link>
     </Compile>
     <Compile Include="Core\Helpers.cs">
       <Link>ExcelDataReader\Core\Helpers.cs</Link>
@@ -197,6 +207,9 @@
     <Compile Include="Core\BinaryFormat\XlsBiffWindow1.cs">
       <Link>ExcelDataReader\Core\BinaryFormat\XlsBiffWindow1.cs</Link>
     </Compile>
+    <Compile Include="Core\BinaryFormat\XlsBiffXF.cs">
+      <Link>ExcelDataReader\Core\BinaryFormat\XlsBiffXF.cs</Link>
+    </Compile>
     <Compile Include="Core\BinaryFormat\XlsByteString.cs">
       <Link>ExcelDataReader\Core\BinaryFormat\XlsByteString.cs</Link>
     </Compile>
@@ -239,6 +252,39 @@
     <Compile Include="Core\CompoundFormat\CompoundStream.cs">
       <Link>ExcelDataReader\Core\CompoundFormat\CompoundStream.cs</Link>
     </Compile>
+    <Compile Include="Core\NumberFormat\Color.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\Color.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\Condition.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\Condition.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\DecimalSection.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\DecimalSection.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\ExponentialSection.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\ExponentialSection.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\Formatter.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\Formatter.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\FractionSection.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\FractionSection.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\Parser.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\Parser.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\Section.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\Section.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\SectionType.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\SectionType.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\Token.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\Token.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\Tokenizer.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\Tokenizer.cs</Link>
+    </Compile>
     <Compile Include="Core\OfficeCrypto\AgileEncryptedPackageStream.cs">
       <Link>ExcelDataReader\Core\OfficeCrypto\AgileEncryptedPackageStream.cs</Link>
     </Compile>
@@ -259,6 +305,9 @@
     </Compile>
     <Compile Include="Core\OfficeCrypto\RC4Managed.cs">
       <Link>ExcelDataReader\Core\OfficeCrypto\RC4Managed.cs</Link>
+    </Compile>
+    <Compile Include="Core\OfficeCrypto\StandardEncryptedPackageStream.cs">
+      <Link>ExcelDataReader\Core\OfficeCrypto\StandardEncryptedPackageStream.cs</Link>
     </Compile>
     <Compile Include="Core\OfficeCrypto\StandardEncryption.cs">
       <Link>ExcelDataReader\Core\OfficeCrypto\StandardEncryption.cs</Link>
@@ -335,15 +384,5 @@
     <Compile Include="Portable\ZipEntry.cs">
       <Link>ExcelDataReader\Portable\ZipEntry.cs</Link>
     </Compile>
-    <Compile Include="Core\OfficeCrypto\StandardEncryptedPackageStream.cs">
-      <Link>ExcelDataReader\Core\OfficeCrypto\StandardEncryptedPackageStream.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Data" />
-    <Reference Include="System" />
-    <Reference Include="System.Xml.Serialization" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.IO.Compression" />
   </ItemGroup>
 </Project>

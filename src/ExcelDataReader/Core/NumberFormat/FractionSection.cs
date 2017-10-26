@@ -42,9 +42,16 @@ namespace ExcelDataReader.Core.NumberFormat
                 return false;
             }
 
-            GetNumerator(numeratorParts, out var integerPart, out var numeratorPart);
+            List<string> integerPart;
+            List<string> numeratorPart;
+            GetNumerator(numeratorParts, out integerPart, out numeratorPart);
 
-            if (!TryGetDenominator(denominatorParts, out var denominatorPrefix, out var denominatorPart, out var denominatorConstant, out var denominatorSuffix, out var fractionSuffix))
+            List<string> denominatorPrefix;
+            List<string> denominatorPart;
+            int denominatorConstant;
+            List<string> denominatorSuffix;
+            List<string> fractionSuffix;
+            if (!TryGetDenominator(denominatorParts, out denominatorPrefix, out denominatorPart, out denominatorConstant, out denominatorSuffix, out fractionSuffix))
             {
                 format = null;
                 return false;

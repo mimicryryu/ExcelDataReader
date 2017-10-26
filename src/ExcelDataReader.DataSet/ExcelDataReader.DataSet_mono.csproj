@@ -36,7 +36,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="ExcelDataReader.DataSet\" />
+    <ProjectReference Include="..\ExcelDataReader\ExcelDataReader_mono.csproj">
+      <Project>{D2FEB2D7-95FB-4190-9AA7-B0D7D2B36F05}</Project>
+      <Name>ExcelDataReader_mono</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelDataReaderExtensions.cs">
@@ -54,11 +57,5 @@
     <Compile Include="Portable\Func.cs">
       <Link>ExcelDataReader.DataSet\Portable\Func.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExcelDataReader\ExcelDataReader_mono.csproj">
-      <Project>{D2FEB2D7-95FB-4190-9AA7-B0D7D2B36F05}</Project>
-      <Name>ExcelDataReader_mono</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

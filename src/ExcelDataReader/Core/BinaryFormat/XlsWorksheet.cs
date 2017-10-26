@@ -121,7 +121,8 @@ namespace ExcelDataReader.Core.BinaryFormat
 
         public NumberFormatString GetNumberFormatString(int numberFormatIndex)
         {
-            if (Formats.TryGetValue((ushort)numberFormatIndex, out var fmtString))
+            NumberFormatString fmtString;
+            if (Formats.TryGetValue((ushort)numberFormatIndex, out fmtString))
             {
                 return fmtString;
             }
@@ -144,7 +145,8 @@ namespace ExcelDataReader.Core.BinaryFormat
                 
                 for (var i = 0; i < blockRowCount; ++i)
                 {
-                    if (block.Rows.TryGetValue(rowIndex + i, out var row))
+                    Row row;
+                    if (block.Rows.TryGetValue(rowIndex + i, out row))
                     {
                         yield return row;
                     }
@@ -161,7 +163,8 @@ namespace ExcelDataReader.Core.BinaryFormat
             XlsBiffRecord rec;
             XlsBiffRecord ixfe = null;
 
-            if (!GetMinMaxOffsetsForRowBlock(startRow, rows, out var minOffset, out var maxOffset))
+            int minOffset, maxOffset;
+            if (!GetMinMaxOffsetsForRowBlock(startRow, rows, out minOffset, out maxOffset))
                 return result;
 
             biffStream.Position = minOffset;
@@ -217,7 +220,8 @@ namespace ExcelDataReader.Core.BinaryFormat
 
         private Row EnsureRow(XlsRowBlock result, int rowIndex)
         {
-            if (!result.Rows.TryGetValue(rowIndex, out var currentRow))
+            Row currentRow;
+            if (!result.Rows.TryGetValue(rowIndex, out currentRow))
             {
                 currentRow = new Row()
                 {
@@ -429,8 +433,9 @@ namespace ExcelDataReader.Core.BinaryFormat
 
                 while (rec != null && !(rec is XlsBiffEof))
                 {
-                    if (rec is XlsBiffDimensions dims)
+                    if (rec is XlsBiffDimensions)
                     {
+                        XlsBiffDimensions dims = rec as XlsBiffDimensions;
                         FieldCount = dims.LastColumn;
                         RowCount = (int)dims.LastRow;
                     }
@@ -542,7 +547,8 @@ namespace ExcelDataReader.Core.BinaryFormat
 
             for (var i = 0; i < rowCount; i++)
             {
-                if (RowMinMaxOffsets.TryGetValue(rowIndex + i, out var minMax))
+                KeyValuePair<int, int> minMax;
+                if (RowMinMaxOffsets.TryGetValue(rowIndex + i, out minMax))
                 {
                     minOffset = Math.Min(minOffset, minMax.Key);
                     maxOffset = Math.Max(maxOffset, minMax.Value);
@@ -554,7 +560,8 @@ namespace ExcelDataReader.Core.BinaryFormat
 
         private void SetMinMaxRowOffset(int rowIndex, int recordOffset)
         {
-            if (!RowMinMaxOffsets.TryGetValue(rowIndex, out var minMax))
+			KeyValuePair<int, int> minMax;
+			if (!RowMinMaxOffsets.TryGetValue(rowIndex, out minMax))
                 minMax = new KeyValuePair<int, int>(int.MaxValue, int.MinValue);
 
             RowMinMaxOffsets[rowIndex] = new KeyValuePair<int, int>(

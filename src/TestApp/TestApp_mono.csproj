@@ -35,20 +35,12 @@
     <Folder Include="TestApp\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.Designer.cs">
-      <Link>TestApp\Form1.Designer.cs</Link>
-    </Compile>
     <Compile Include="Form1.cs">
       <Link>TestApp\Form1.cs</Link>
     </Compile>
     <Compile Include="Program.cs">
       <Link>TestApp\Program.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Form1.resx">
-      <Link>TestApp\Form1.resx</Link>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

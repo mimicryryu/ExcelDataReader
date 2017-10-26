@@ -49,7 +49,8 @@ namespace ExcelDataReader.Core
 
         public static NumberFormatString GetBuiltinNumberFormat(int numFmtId)
         {
-            if (Formats.TryGetValue(numFmtId, out var result))
+            NumberFormatString result;
+            if (Formats.TryGetValue(numFmtId, out result))
                 return result;
 
             return null;

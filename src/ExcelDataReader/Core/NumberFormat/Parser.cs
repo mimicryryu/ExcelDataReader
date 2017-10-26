@@ -42,9 +42,11 @@ namespace ExcelDataReader.Core.NumberFormat
                     // Does not add to tokens. Absolute/elapsed time tokens
                     // also start with '[', but handled as date part above
                     var expression = token.Substring(1, token.Length - 2);
-                    if (TryParseCondition(expression, out var parseCondition))
+                    Condition parseCondition;
+                    Color parseColor;
+                    if (TryParseCondition(expression, out parseCondition))
                         condition = parseCondition;
-                    else if (TryParseColor(expression, out var parseColor))
+                    else if (TryParseColor(expression, out parseColor))
                         color = parseColor;
                 }
                 else

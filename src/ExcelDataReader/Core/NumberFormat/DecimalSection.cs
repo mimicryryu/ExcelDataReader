@@ -18,7 +18,10 @@ namespace ExcelDataReader.Core.NumberFormat
 
         public static bool TryParse(List<string> tokens, out DecimalSection format)
         {
-            if (Parser.ParseNumberTokens(tokens, 0, out var beforeDecimal, out var decimalSeparator, out var afterDecimal) == tokens.Count)
+            List<string> beforeDecimal;
+            bool decimalSeparator;
+            List<string> afterDecimal;
+            if (Parser.ParseNumberTokens(tokens, 0, out beforeDecimal, out decimalSeparator, out afterDecimal) == tokens.Count)
             {
                 bool thousandSeparator;
                 var divisor = GetTrailingCommasDivisor(tokens, out thousandSeparator);

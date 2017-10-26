@@ -214,7 +214,8 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 }
                 else if (xmlReader.IsStartElement(NSheetFormatProperties, NsSpreadsheetMl))
                 {
-                    if (double.TryParse(xmlReader.GetAttribute(ADefaultRowHeight), NumberStyles.Any, CultureInfo.InvariantCulture, out var defaultRowHeight))
+                    double defaultRowHeight;
+                    if (double.TryParse(xmlReader.GetAttribute(ADefaultRowHeight), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultRowHeight))
                         DefaultRowHeight = defaultRowHeight;
 
                     xmlReader.Skip();
@@ -323,14 +324,18 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 Cells = new List<Cell>()
             };
 
-            if (int.TryParse(xmlReader.GetAttribute(AR), out int rowIndex))
+            int rowIndex;
+            if (int.TryParse(xmlReader.GetAttribute(AR), out rowIndex))
                 result.RowIndex = rowIndex - 1; // The row attribute is 1-based
             else
                 result.RowIndex = nextRowIndex;
 
-            int.TryParse(xmlReader.GetAttribute(AHidden), out int hidden);
-            int.TryParse(xmlReader.GetAttribute(ACustomHeight), out int customHeight);
-            double.TryParse(xmlReader.GetAttribute(AHt), NumberStyles.Any, CultureInfo.InvariantCulture, out var height);
+            int hidden;
+            int.TryParse(xmlReader.GetAttribute(AHidden), out hidden);
+            int customHeight;
+            int.TryParse(xmlReader.GetAttribute(ACustomHeight), out customHeight);
+            double height;
+            double.TryParse(xmlReader.GetAttribute(AHt), NumberStyles.Any, CultureInfo.InvariantCulture, out height);
 
             if (hidden == 0)
                 result.Height = customHeight != 0 ? height : DefaultRowHeight;
@@ -366,14 +371,17 @@ namespace ExcelDataReader.Core.OpenXmlFormat
             var aT = xmlReader.GetAttribute(AT);
             var aR = xmlReader.GetAttribute(AR);
 
-            if (ReferenceHelper.ParseReference(aR, out int referenceColumn, out int referenceRow))
+            int referenceColumn;
+            int referenceRow;
+            if (ReferenceHelper.ParseReference(aR, out referenceColumn, out referenceRow))
                 result.ColumnIndex = referenceColumn - 1; // ParseReference is 1-based
             else
                 result.ColumnIndex = nextColumnIndex;
 
             if (aS != null)
             {
-                if (int.TryParse(aS, NumberStyles.Any, CultureInfo.InvariantCulture, out var styleIndex))
+                int styleIndex;
+                if (int.TryParse(aS, NumberStyles.Any, CultureInfo.InvariantCulture, out styleIndex))
                 {
                     if (styleIndex >= 0 && styleIndex < Workbook.Styles.CellXfs.Count)
                     {
@@ -443,7 +451,8 @@ namespace ExcelDataReader.Core.OpenXmlFormat
             switch (aT)
             {
                 case AS: //// if string
-                    if (int.TryParse(rawValue, style, invariantCulture, out var sstIndex))
+                    int sstIndex;
+                    if (int.TryParse(rawValue, style, invariantCulture, out sstIndex))
                     {
                         if (sstIndex >= 0 && sstIndex < Workbook.SST.Count)
                         {
@@ -458,12 +467,14 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                 case "b": //// boolean
                     return rawValue == "1";
                 case "d": //// ISO 8601 date
-                    if (DateTime.TryParseExact(rawValue, "yyyy-MM-dd", invariantCulture, DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out var date))
+                    DateTime date;
+                    if (DateTime.TryParseExact(rawValue, "yyyy-MM-dd", invariantCulture, DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite, out date))
                         return date;
 
                     return rawValue;
                 default:
-                    bool isNumber = double.TryParse(rawValue, style, invariantCulture, out double number);
+                    double number;
+                    bool isNumber = double.TryParse(rawValue, style, invariantCulture, out number);
 
                     if (isNumber && IsDateTimeStyle(numberFormatIndex))
                         return Helpers.ConvertFromOATime(number, Workbook.IsDate1904);

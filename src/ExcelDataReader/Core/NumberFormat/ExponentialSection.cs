@@ -20,7 +20,10 @@ namespace ExcelDataReader.Core.NumberFormat
 
             string exponentialToken;
 
-            int partCount = Parser.ParseNumberTokens(tokens, 0, out var beforeDecimal, out var decimalSeparator, out var afterDecimal);
+            List<string> beforeDecimal;
+            bool decimalSeparator;
+            List<string> afterDecimal;
+            int partCount = Parser.ParseNumberTokens(tokens, 0, out beforeDecimal, out decimalSeparator, out afterDecimal);
 
             if (partCount == 0)
                 return false;
