@@ -50,6 +50,8 @@ namespace ExcelDataReader
 
         public HeaderFooter HeaderFooter => _worksheetIterator?.Current?.HeaderFooter;
 
+        public CellRange[] MergeCells => _worksheetIterator?.Current?.MergeCells;
+
         public int Depth { get; private set; }
 
         public int ResultsCount => Workbook?.ResultsCount ?? -1;
@@ -57,8 +59,10 @@ namespace ExcelDataReader
         public bool IsClosed { get; private set; }
 
         public int FieldCount => _worksheetIterator?.Current?.FieldCount ?? 0;
-	
-		public int RecordsAffected {set{throw new NotSupportedException();}get{throw new NotSupportedException();}}
+
+        public int RowCount => _worksheetIterator?.Current?.RowCount ?? 0;
+
+        public int RecordsAffected {set{throw new NotSupportedException();}get{throw new NotSupportedException();}}
 
         public double RowHeight => _rowIterator?.Current.Height ?? 0;
 
@@ -123,16 +127,16 @@ namespace ExcelDataReader
         }
 
 		public int GetValues(object[] values) {throw new NotSupportedException();}
-
+               
         public bool IsDBNull(int i) => GetValue(i) == null;
 
-        public NumberFormatString GetNumberFormatString(int i)
+        public string GetNumberFormatString(int i)
         {
             if (RowCells == null)
                 throw new InvalidOperationException("No data exists for the row/column.");
             if (RowCells[i] == null)
                 return null;
-            return _worksheetIterator?.Current?.GetNumberFormatString(RowCells[i].NumberFormatIndex);
+            return _worksheetIterator?.Current?.GetNumberFormatString(RowCells[i].NumberFormatIndex)?.FormatString;
         }
 
         /// <inheritdoc />

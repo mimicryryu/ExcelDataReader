@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ExcelDataReader.Core.NumberFormat;
 
 namespace ExcelDataReader.Core
 {
@@ -16,6 +17,10 @@ namespace ExcelDataReader.Core
         HeaderFooter HeaderFooter { get; }
 
         int FieldCount { get; }
+
+        int RowCount { get; }
+
+        CellRange[] MergeCells { get; }
 
         IEnumerable<Row> ReadRows();
 

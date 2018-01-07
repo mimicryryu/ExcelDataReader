@@ -37,7 +37,7 @@ namespace ExcelDataReader.Core
         /// <returns>The shared strings stream.</returns>
         public Stream GetSharedStringsStream()
         {
-            var zipEntry = _zipFile.GetEntry(string.Format(FileSharedStrings, Format));
+            var zipEntry = FindEntry(string.Format(FileSharedStrings, Format));
             return zipEntry?.Open();
         }
 
@@ -47,7 +47,7 @@ namespace ExcelDataReader.Core
         /// <returns>The styles stream.</returns>
         public Stream GetStylesStream()
         {
-            var zipEntry = _zipFile.GetEntry(string.Format(FileStyles, Format));
+            var zipEntry = FindEntry(string.Format(FileStyles, Format));
             return zipEntry?.Open();
         }
 
@@ -57,7 +57,7 @@ namespace ExcelDataReader.Core
         /// <returns>The workbook stream.</returns>
         public Stream GetWorkbookStream()
         {
-            var zipEntry = _zipFile.GetEntry(string.Format(FileWorkbook, Format));
+            var zipEntry = FindEntry(string.Format(FileWorkbook, Format));
             return zipEntry?.Open();
         }
 
@@ -68,7 +68,7 @@ namespace ExcelDataReader.Core
         /// <returns>The worksheet stream.</returns>
         public Stream GetWorksheetStream(int sheetId)
         {
-            var zipEntry = _zipFile.GetEntry(string.Format(FileSheet, sheetId, Format));
+            var zipEntry = FindEntry(string.Format(FileSheet, sheetId, Format));
             return zipEntry?.Open();
         }
 
@@ -76,12 +76,12 @@ namespace ExcelDataReader.Core
         {
             // its possible sheetPath starts with /xl. in this case trim the /
             // see the test "Issue_11522_OpenXml"
-            if (sheetPath.StartsWith("/xl/", StringComparison.Ordinal))
+            if (sheetPath.StartsWith("/xl/", StringComparison.OrdinalIgnoreCase))
                 sheetPath = sheetPath.Substring(1);
             else
                 sheetPath = "xl/" + sheetPath;
 
-            var zipEntry = _zipFile.GetEntry(sheetPath);
+            var zipEntry = FindEntry(sheetPath);
             return zipEntry?.Open();
         }
 
@@ -91,8 +91,19 @@ namespace ExcelDataReader.Core
         /// <returns>The rels stream.</returns>
         public Stream GetWorkbookRelsStream()
         {
-            var zipEntry = _zipFile.GetEntry(string.Format(FileRels, Format));
+            var zipEntry = FindEntry(string.Format(FileRels, Format));
             return zipEntry?.Open();
+        }
+
+        private ZipArchiveEntry FindEntry(string name)
+        {
+            foreach (var entry in _zipFile.Entries)
+            {
+                if (entry.FullName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    return entry;
+            }
+
+            return null;
         }
     }
 
