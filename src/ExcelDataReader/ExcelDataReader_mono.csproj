@@ -32,9 +32,6 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="ExcelDataReader\" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System.Data" />
     <Reference Include="System" />
     <Reference Include="System.Xml.Serialization" />
@@ -44,6 +41,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
       <Link>ExcelDataReader\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="CellRange.cs">
+      <Link>ExcelDataReader\CellRange.cs</Link>
     </Compile>
     <Compile Include="Errors.cs">
       <Link>ExcelDataReader\Errors.cs</Link>
@@ -68,9 +68,6 @@
     </Compile>
     <Compile Include="IExcelDataReader.cs">
       <Link>ExcelDataReader\IExcelDataReader.cs</Link>
-    </Compile>
-    <Compile Include="NumberFormatString.cs">
-      <Link>ExcelDataReader\NumberFormatString.cs</Link>
     </Compile>
     <Compile Include="Core\BuiltinNumberFormat.cs">
       <Link>ExcelDataReader\Core\BuiltinNumberFormat.cs</Link>
@@ -171,6 +168,9 @@
     <Compile Include="Core\BinaryFormat\XlsBiffMSODrawing.cs">
       <Link>ExcelDataReader\Core\BinaryFormat\XlsBiffMSODrawing.cs</Link>
     </Compile>
+    <Compile Include="Core\BinaryFormat\XlsBiffMergeCells.cs">
+      <Link>ExcelDataReader\Core\BinaryFormat\XlsBiffMergeCells.cs</Link>
+    </Compile>
     <Compile Include="Core\BinaryFormat\XlsBiffMulBlankCell.cs">
       <Link>ExcelDataReader\Core\BinaryFormat\XlsBiffMulBlankCell.cs</Link>
     </Compile>
@@ -264,11 +264,11 @@
     <Compile Include="Core\NumberFormat\ExponentialSection.cs">
       <Link>ExcelDataReader\Core\NumberFormat\ExponentialSection.cs</Link>
     </Compile>
-    <Compile Include="Core\NumberFormat\Formatter.cs">
-      <Link>ExcelDataReader\Core\NumberFormat\Formatter.cs</Link>
-    </Compile>
     <Compile Include="Core\NumberFormat\FractionSection.cs">
       <Link>ExcelDataReader\Core\NumberFormat\FractionSection.cs</Link>
+    </Compile>
+    <Compile Include="Core\NumberFormat\NumberFormatString.cs">
+      <Link>ExcelDataReader\Core\NumberFormat\NumberFormatString.cs</Link>
     </Compile>
     <Compile Include="Core\NumberFormat\Parser.cs">
       <Link>ExcelDataReader\Core\NumberFormat\Parser.cs</Link>
@@ -333,6 +333,9 @@
     <Compile Include="Core\OpenXmlFormat\XlsxHeaderFooter.cs">
       <Link>ExcelDataReader\Core\OpenXmlFormat\XlsxHeaderFooter.cs</Link>
     </Compile>
+    <Compile Include="Core\OpenXmlFormat\XlsxMergeCells.cs">
+      <Link>ExcelDataReader\Core\OpenXmlFormat\XlsxMergeCells.cs</Link>
+    </Compile>
     <Compile Include="Core\OpenXmlFormat\XlsxNumFmt.cs">
       <Link>ExcelDataReader\Core\OpenXmlFormat\XlsxNumFmt.cs</Link>
     </Compile>
@@ -381,8 +384,8 @@
     <Compile Include="Portable\ZipArchive.cs">
       <Link>ExcelDataReader\Portable\ZipArchive.cs</Link>
     </Compile>
-    <Compile Include="Portable\ZipEntry.cs">
-      <Link>ExcelDataReader\Portable\ZipEntry.cs</Link>
+    <Compile Include="Portable\ZipArchiveEntry.cs">
+      <Link>ExcelDataReader\Portable\ZipArchiveEntry.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>
