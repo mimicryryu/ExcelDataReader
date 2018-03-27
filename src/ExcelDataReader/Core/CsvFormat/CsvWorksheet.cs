@@ -15,7 +15,12 @@ namespace ExcelDataReader.Core.CsvFormat
             try
             {
                 // Try as UTF-8 first, or use BOM if present
-                CsvAnalyzer.Analyze(Stream, autodetectSeparators, Encoding.UTF8, out var fieldCount, out var separator, out var encoding, out var bomLength, out var rowCount);
+                int fieldCount = 0;
+                char separator = default(char);
+                Encoding encoding = null;
+                int bomLength = 0;
+                int rowCount = 0;
+                CsvAnalyzer.Analyze(Stream, autodetectSeparators, Encoding.UTF8, out fieldCount, out separator, out encoding, out bomLength, out rowCount);
                 FieldCount = fieldCount;
                 RowCount = rowCount;
                 Encoding = encoding;
@@ -27,7 +32,12 @@ namespace ExcelDataReader.Core.CsvFormat
                 // If cannot parse as UTF-8, try fallback encoding
                 Stream.Seek(0, SeekOrigin.Begin);
 
-                CsvAnalyzer.Analyze(Stream, autodetectSeparators, fallbackEncoding, out var fieldCount, out var separator, out var encoding, out var bomLength, out var rowCount);
+                int fieldCount = 0;
+                char separator = default(char);
+                Encoding encoding = null;
+                int bomLength = 0;
+                int rowCount = 0;
+                CsvAnalyzer.Analyze(Stream, autodetectSeparators, fallbackEncoding, out fieldCount, out separator, out encoding, out bomLength, out rowCount);
                 FieldCount = fieldCount;
                 RowCount = rowCount;
                 Encoding = encoding;
@@ -75,7 +85,8 @@ namespace ExcelDataReader.Core.CsvFormat
             while (Stream.Position < Stream.Length)
             {
                 var bytesRead = Stream.Read(buffer, 0, bufferSize);
-                csv.ParseBuffer(buffer, skipBomBytes, bytesRead - skipBomBytes, out var bufferRows);
+                List<List<string>> bufferRows;
+                csv.ParseBuffer(buffer, skipBomBytes, bytesRead - skipBomBytes, out bufferRows);
 
                 skipBomBytes = 0; // Only skip bom on first iteration
 
@@ -87,7 +98,8 @@ namespace ExcelDataReader.Core.CsvFormat
                 rowIndex += bufferRows.Count;
             }
 
-            csv.Flush(out var flushRows);
+            List<List<string>> flushRows;
+            csv.Flush(out flushRows);
             foreach (var row in GetReaderRows(rowIndex, flushRows))
             {
                 yield return row;

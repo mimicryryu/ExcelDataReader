@@ -387,5 +387,20 @@
     <Compile Include="Portable\ZipArchiveEntry.cs">
       <Link>ExcelDataReader\Portable\ZipArchiveEntry.cs</Link>
     </Compile>
+    <Compile Include="Core\CsvFormat\CsvAnalyzer.cs">
+      <Link>ExcelDataReader\Core\CsvFormat\CsvAnalyzer.cs</Link>
+    </Compile>
+    <Compile Include="Core\CsvFormat\CsvParser.cs">
+      <Link>ExcelDataReader\Core\CsvFormat\CsvParser.cs</Link>
+    </Compile>
+    <Compile Include="Core\CsvFormat\CsvWorkbook.cs">
+      <Link>ExcelDataReader\Core\CsvFormat\CsvWorkbook.cs</Link>
+    </Compile>
+    <Compile Include="Core\CsvFormat\CsvWorksheet.cs">
+      <Link>ExcelDataReader\Core\CsvFormat\CsvWorksheet.cs</Link>
+    </Compile>
+    <Compile Include="ExcelCsvReader.cs">
+      <Link>ExcelDataReader\ExcelCsvReader.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

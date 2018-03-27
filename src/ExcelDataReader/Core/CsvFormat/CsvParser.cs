@@ -97,7 +97,10 @@ namespace ExcelDataReader.Core.CsvFormat
         private void DecodeChar()
         {
             var c = new char[1];
-            Decoder.Convert(Buffer, 0, BufferWritePosition, c, 0, 1, true, out var bytesUsed, out var charsUsed, out var completed);
+            int bytesUsed = 0;
+            int charsUsed = 0;
+            bool completed = false;
+            Decoder.Convert(Buffer, 0, BufferWritePosition, c, 0, 1, true, out bytesUsed, out charsUsed, out completed);
             ParseChar(c[0], bytesUsed);
 
             Array.Copy(Buffer, bytesUsed, Buffer, 0, BufferWritePosition - bytesUsed);
